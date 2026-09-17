@@ -97,7 +97,7 @@ class Order_Handler {
      * @param int $refund_id The refund ID
      * @return void
      */
-    public function maybe_generate_invoice_automatic($order_id, $refund_id) {
+    public function maybe_generate_credit_note_automatic($order_id, $refund_id) {
         $this->maybe_generate_invoice_automatic($refund_id);
     }
 
