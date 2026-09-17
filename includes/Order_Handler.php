@@ -50,6 +50,7 @@ class Order_Handler {
 
         // Automatic invoice generation on order completed (priority 1 to run before emails at priority 10)
         add_action('woocommerce_order_status_completed', array($this, 'maybe_generate_invoice_automatic'), 1);
+        add_action('woocommerce_order_refunded', array($this, 'maybe_generate_credit_note_automatic'), 1, 2);
 
         // Note: Credit notes are generated on-demand when accessed (email, download, etc.)
         // if parent invoice exists, for accounting compliance
@@ -86,6 +87,18 @@ class Order_Handler {
             wp_schedule_event(time(), 'daily', 'b2brouter_cleanup_old_pdfs');
         }
         add_action('b2brouter_cleanup_old_pdfs', array($this, 'run_scheduled_cleanup'));
+    }
+
+    /**
+     * Maybe generate invoice automatically
+     *
+     * @since 1.0.0
+     * @param int $order_id The order ID
+     * @param int $refund_id The refund ID
+     * @return void
+     */
+    public function maybe_generate_invoice_automatic($order_id, $refund_id) {
+        $this->maybe_generate_invoice_automatic($refund_id);
     }
 
     /**
